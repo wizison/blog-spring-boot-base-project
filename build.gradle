@@ -1,0 +1,80 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.8.RELEASE'
+        springDependencyManagementPluginVersion = '1.0.3.RELEASE'
+    }
+    repositories {
+        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath("io.spring.gradle:dependency-management-plugin:${springDependencyManagementPluginVersion}")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+group 'at.wizi.blog'
+version '1.0.0'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+sourceSets {
+    integrationTest {
+        java {
+            srcDir 'src/integrationTest/java'
+        }
+        resources {
+            srcDir 'src/integrationTest/resources'
+        }
+        compileClasspath += sourceSets.test.compileClasspath
+        runtimeClasspath += sourceSets.test.runtimeClasspath
+    }
+}
+
+idea {
+    module {
+        downloadSources = true
+        testSourceDirs += (sourceSets.integrationTest.java.srcDirs + sourceSets.integrationTest.resources.srcDirs)
+    }
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'io.spring.platform:platform-bom:Brussels-SR6'
+    }
+}
+
+dependencies {
+    compile 'org.projectlombok:lombok'
+
+    compile 'ch.qos.logback:logback-core'
+    compile 'ch.qos.logback:logback-classic'
+
+    compile 'org.springframework.boot:spring-boot-starter-web'
+}
+
+jar {
+    baseName = 'spring-base'
+    version = ''
+}
+
+springBoot {
+    executable = true
+    buildInfo()
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.5.1'
+}
