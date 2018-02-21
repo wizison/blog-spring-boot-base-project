@@ -1,5 +1,5 @@
 # blog-spring-boot-base-project
-this is the base project for all projects around my blog. feel free to use it as your base project, also.
+This is the base project for all projects around my blog. Feel free to use it as your base project, too.
 
 ## Technologies / Frameworks
  - Java 1.8
