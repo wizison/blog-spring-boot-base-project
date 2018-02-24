@@ -2,28 +2,36 @@ buildscript {
     ext {
         springBootVersion = '1.5.8.RELEASE'
         springDependencyManagementPluginVersion = '1.0.3.RELEASE'
+        propDepsVersion = '0.0.9.RELEASE'
     }
     repositories {
         jcenter()
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url 'http://repo.spring.io/plugins-release'
         }
     }
     dependencies {
         classpath("io.spring.gradle:dependency-management-plugin:${springDependencyManagementPluginVersion}")
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("io.spring.gradle:propdeps-plugin:${propDepsVersion}")
     }
+}
+
+repositories {
+    mavenLocal()
+    jcenter()
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
-
-group 'at.wizi.blog'
-version '1.0.0'
+apply plugin: 'propdeps-idea'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+group 'at.wizi.blog'
+version '1.0.0'
 
 sourceSets {
     integrationTest {
@@ -45,14 +53,9 @@ idea {
     }
 }
 
-repositories {
-    mavenLocal()
-    jcenter()
-}
-
 dependencyManagement {
     imports {
-        mavenBom 'io.spring.platform:platform-bom:Brussels-SR6'
+        mavenBom 'io.spring.platform:platform-bom:Brussels-SR7'
     }
 }
 
@@ -63,6 +66,20 @@ dependencies {
     compile 'ch.qos.logback:logback-classic'
 
     compile 'org.springframework.boot:spring-boot-starter-web'
+
+    optional 'org.springframework.boot:spring-boot-configuration-processor'
+
+    testCompile 'org.assertj:assertj-core'
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+
+}
+
+compileJava.dependsOn(processResources)
+
+task integrationTest(type: Test) {
+    group = 'verification'
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 jar {

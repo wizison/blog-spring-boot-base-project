@@ -16,3 +16,8 @@ spring:
   output:
     ansi:
       enabled: always
+
+base:
+  maxEntries: 5
+  welcomeMessage: welcome to the base project
+
