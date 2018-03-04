@@ -1,6 +1,7 @@
 package at.wizi.blog.controller;
 
 import at.wizi.blog.config.ApplicationConfig;
+import at.wizi.blog.config.properties.ApplicationProperties;
 import at.wizi.blog.controller.model.WelcomeResponse;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,11 +22,17 @@ public class WelcomeControllerTest {
 
     @Configuration
     static class TestConfig {
+
         @Bean
-        public ApplicationConfig applicationConfig() {
-            ApplicationConfig applicationConfig = new ApplicationConfig();
-            applicationConfig.setWelcomeMessage("test welcome message");
-            return applicationConfig;
+        public ApplicationProperties applicationProperties() {
+            ApplicationProperties applicationProperties = new ApplicationProperties();
+            applicationProperties.setWelcomeMessage("test welcome message");
+            return applicationProperties;
+        }
+
+        @Bean
+        public ApplicationConfig applicationConfig(final ApplicationProperties applicationProperties) {
+            return new ApplicationConfig(applicationProperties);
         }
     }
 

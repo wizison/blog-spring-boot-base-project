@@ -19,6 +19,6 @@ public class WelcomeController {
 
     @GetMapping
     public WelcomeResponse welcome() {
-        return new WelcomeResponse(applicationConfig.getWelcomeMessage());
+        return new WelcomeResponse(applicationConfig.getApplicationProperties().getWelcomeMessage());
     }
 }
